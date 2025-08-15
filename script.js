@@ -9,17 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
         { text: "The future depends on the actions you take today", category: "Inspiration" }
     ];
 
-    function displayQuote() {
+    function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
         const quote = quotes[randomIndex];
-        quoteDisplay.textContent = `"${quote.text}" - ${quote.category}`;
+        quoteDisplay.innerHTML = `"${quote.text}" - ${quote.category}`;
     }
 
-    function showRandomQuote() {
-        displayQuote();
-    }
     newQuoteButton.addEventListener("click", showRandomQuote);
     showRandomQuote();
 
-    
 })
