@@ -75,10 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Export Quotes
     function exportQuotes() {
-        const exportButton = document.createElement("button");
-        exportButton.textContent = "Export Quotes";
-
-        document.body.appendChild(exportButton);
+        const exportButton = document.getElementById("exportQuotes");
 
         exportButton.addEventListener("click", function() {
             const quotesDataStr = JSON.stringify(quotes, null, 2);
