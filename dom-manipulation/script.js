@@ -2,19 +2,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const quoteDisplay = document.getElementById("quoteDisplay");
     const newQuoteButton = document.getElementById("newQuote");
+
+    // Load existing quotes if there are any
     
-    const quotes = [
+    let quotes = JSON.parse(localStorage.getItem("quotes")) || [
         { text: "With ALX, you are signed up to do hard things", category: "Motivation" },
         { text: "In life, not a taking is risk is taking an even more risk", category: "Life" },
         { text: "The future depends on the actions you take today", category: "Inspiration" }
     ];
 
+    function saveQuotes() {
+        localStorage.setItem("quotes", JSON.stringify(quotes));
+    }
+
+    
+
+    // Select and display a random quote
     function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
         const quote = quotes[randomIndex];
         quoteDisplay.innerHTML = `"${quote.text}" - ${quote.category}`;
     }
 
+    // Dynamically create a form to add new quotes
     function createAddQuoteForm() {
         const form = document.createElement("div");
 
@@ -48,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if(newText && newCategory) {
                 quotes.push({ text: newText, category: newCategory });
     
+                saveQuotes();
                 textInput.value = "";
                 categoryInput.value = "";
                 
@@ -62,6 +73,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
+    // Export Quotes
+    function exportQuotes() {
+        const exportButton = document.createElement("button");
+        exportButton.textContent = "Export Quotes";
+
+        document.body.appendChild(exportButton);
+
+        exportButton.addEventListener("click", function() {
+            const quotesDataStr = JSON.stringify(quotes, null, 2);
+            const blob = new Blob([quotesDataStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "quotes.json";
+            // a.textContent = "Download Quotes";
+            // document.body.appendChild(a);
+            a.click();
+
+            URL.revokeObjectURL(url);
+        })
+    }
+
     // const addQuoteButton = document.getElementById("addQuoteButton");
     // addQuoteButton.addEventListener("click", createAddQuoteForm);
 
@@ -69,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function() {
     showRandomQuote();
 
     createAddQuoteForm();
+
+    exportQuotes();
 
     
 })
