@@ -16,29 +16,59 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function createAddQuoteForm() {
-        const textInput = document.getElementById("newQuoteText");
-        const categoryInput = document.getElementById("newQuoteCategory");
+        const form = document.createElement("div");
 
-        const newText = textInput.value.trim();
-        const newCategory = categoryInput.value.trim();
+        // const textInput = document.getElementById("newQuoteText");
+        const textInput = document.createElement("input");
+        textInput.id = "newQuoteText";
+        textInput.type = "text";
+        textInput.placeholder = "Enter a new quote";
 
-        if(newText && newCategory) {
-            quotes.push({ text: newText, category: newCategory });
+        // const categoryInput = document.getElementById("newQuoteCategory");
+        const categoryInput = document.createElement("input");
+        categoryInput.id = "newQuoteCategory";
+        categoryInput.type = "text";
+        categoryInput.placeholder = "Enter quote category";
 
-            textInput.value = "";
-            categoryInput.value = "";
+        const addButton = document.createElement("button");
+        addButton.id = "addQuoteButton";
+        addButton.textContent = "Add Quote";
 
-            quoteDisplay.innerHTML = `"${newText}" - ${newCategory}`;
-        } else {
-            alert("Please enter both text and category for the new quote.");
-        }
+        form.appendChild(textInput);
+        form.appendChild(categoryInput);
+        form.appendChild(addButton);
+
+        document.body.appendChild(form);
+
+        addButton.addEventListener("click", function() {
+            const newText = textInput.value.trim();
+            const newCategory = categoryInput.value.trim();
+            
+            
+            if(newText && newCategory) {
+                quotes.push({ text: newText, category: newCategory });
+    
+                textInput.value = "";
+                categoryInput.value = "";
+                
+                quoteDisplay.innerHTML = `"${newText}" - ${newCategory}`;
+            } else {
+                alert("Please enter both text and category for the new quote.");
+            }
+        })
+
+
+
+
     }
 
-    const addQuoteButton = document.getElementById("addQuoteButton");
-    addQuoteButton.addEventListener("click", createAddQuoteForm);
+    // const addQuoteButton = document.getElementById("addQuoteButton");
+    // addQuoteButton.addEventListener("click", createAddQuoteForm);
 
     newQuoteButton.addEventListener("click", showRandomQuote);
     showRandomQuote();
+
+    createAddQuoteForm();
 
     
 })
