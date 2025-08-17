@@ -15,6 +15,28 @@ document.addEventListener("DOMContentLoaded", function() {
         quoteDisplay.innerHTML = `"${quote.text}" - ${quote.category}`;
     }
 
+    function createAddQuoteForm() {
+        const textInput = document.getElementById("newQuoteText");
+        const categoryInput = document.getElementById("newQuoteCategory");
+
+        const newText = textInput.value.trim();
+        const newCategory = categoryInput.value.trim();
+
+        if(newText && newCategory) {
+            quotes.push({ text: newText, category: newCategory });
+
+            textInput.value = "";
+            categoryInput.value = "";
+
+            quoteDisplay.innerHTML = `"${newText}" - ${newCategory}`;
+        } else {
+            alert("Please enter both text and category for the new quote.");
+        }
+    }
+
+    const addQuoteButton = document.getElementById("addQuoteButton");
+    addQuoteButton.addEventListener("click", createAddQuoteForm);
+
     newQuoteButton.addEventListener("click", showRandomQuote);
     showRandomQuote();
 
