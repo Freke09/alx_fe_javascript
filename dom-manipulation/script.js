@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     newQuoteButton.addEventListener("click", showRandomQuote);
 
-    syncFromServer().then(() => {
+    syncQuotes().then(() => {
         populateCategories();
         showRandomQuote();
         
@@ -197,7 +197,7 @@ function saveServerQuotes(newQuotes) {
 }
 
 
-async function syncFromServer() {
+async function syncQuotes() {
     try {
         const serverData = await fetchQuotesFromServer();
 
