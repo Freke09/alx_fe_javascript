@@ -165,9 +165,15 @@ let serverQuotes = [
 
 // Fake server API
 function fetchQuotesFromServer() {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve([...serverQuotes]), 1000);
-    });
+    return fetch("https://jsonplaceholder.typicode.com/posts")
+        .then(response => response.json())
+        .then(data => {
+
+            return data.map(post => ({
+                text: post.title,
+                category: "imported"
+            }));
+        });
 }
 
 function saveServerQuotes(newQuotes) {
