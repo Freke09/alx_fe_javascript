@@ -1,3 +1,9 @@
+let quotes = JSON.parse(localStorage.getItem("quotes")) || [
+    { text: "With ALX, you are signed up to do hard things", category: "Motivation" },
+    { text: "In life, not a taking is risk is taking an even more risk", category: "Life" },
+    { text: "The future depends on the actions you take today", category: "Inspiration" }
+];
+
 document.addEventListener("DOMContentLoaded", function() {
 
     const quoteDisplay = document.getElementById("quoteDisplay");
@@ -5,11 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Load existing quotes if there are any
     
-    let quotes = JSON.parse(localStorage.getItem("quotes")) || [
-        { text: "With ALX, you are signed up to do hard things", category: "Motivation" },
-        { text: "In life, not a taking is risk is taking an even more risk", category: "Life" },
-        { text: "The future depends on the actions you take today", category: "Inspiration" }
-    ];
 
     function saveQuotes() {
         localStorage.setItem("quotes", JSON.stringify(quotes));
@@ -140,13 +141,79 @@ document.addEventListener("DOMContentLoaded", function() {
     // addQuoteButton.addEventListener("click", createAddQuoteForm);
 
     newQuoteButton.addEventListener("click", showRandomQuote);
-    showRandomQuote();
+
+    syncFromServer().then(() => {
+        populateCategories();
+        showRandomQuote();
+        
+    })
+    
     createAddQuoteForm();
     exportQuotes();
-    populateCategories();
 
     window.filterQuotes = filterQuotes;
     window.importFromJsonFile = importFromJsonFile;
 
     
 })
+
+// Simulate server Interaction:
+let serverQuotes = [
+    {text: "This life is whatever you make of it, and whenever you make it", category: "Life"},
+    {text: "The only way to do great work is to love what you do", category: "Inspiration"}
+];
+
+// Fake server API
+function fetchServerQuotes() {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve([...serverQuotes]), 1000);
+    });
+}
+
+function saveServerQuotes(newQuotes) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            serverQuotes = [...newQuotes];
+            resolve("Saved to server successfully!");
+        }, 1000);
+        });
+}
+
+
+async function syncFromServer() {
+    try {
+        const serverData = await fetchServerQuotes();
+
+
+        // compare with local quotes
+        const localData = JSON.parse(localStorage.getItem("quotes")) || [];
+
+        const mergedData = resolveConflict(localData, serverData);
+
+        localStorage.setItem("quotes", JSON.stringify(mergedData));
+        quotes = mergedData;
+
+        await saveServerQuotes(mergedData);
+        alert("Quotes synced successfully from server!");
+    } catch (error) {
+        console.error("Error syncing from server:", error);
+    }
+}
+
+function resolveConflict(local, server) {
+    const merged = [];
+
+    const map = new Map();
+
+    [...local, ...server].forEach(q => {
+        if (!map.has(q.text)) {
+            map.set(q.text, q);
+        } else {
+            const existing = map.get(q.text);
+
+            // keep the newest one
+            map.set(q.text, existing ? q : existing);
+        }
+    });
+    return Array.from(map.values());
+}
