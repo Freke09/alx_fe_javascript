@@ -211,12 +211,12 @@ async function syncQuotes() {
         quotes = mergedData;
 
         await saveServerQuotes(mergedData);
-        alert("Quotes synced successfully from server!");
+        alert("Quotes synced with server!");
 
         setInterval(() => {
             syncQuotes();
         }, 1800000); // Sync every 30 minutes
-        
+
     } catch (error) {
         console.error("Error syncing from server:", error);
     }
