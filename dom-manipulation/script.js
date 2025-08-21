@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 categoryInput.value = "";
                 
                 quoteDisplay.innerHTML = `"${newText}" - ${newCategory}`;
+
+                saveServerQuotes({ text: newText, category: newCategory });
             } else {
                 alert("Please enter both text and category for the new quote.");
             }
@@ -177,12 +179,21 @@ function fetchQuotesFromServer() {
 }
 
 function saveServerQuotes(newQuotes) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            serverQuotes = [...newQuotes];
-            resolve("Saved to server successfully!");
-        }, 1000);
-        });
+    return fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify(newQuotes)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Quotes saved to server:", data);
+        return data;
+    })
+    .catch(error => {
+        console.error("Error saving quotes to server:", error);
+    });
 }
 
 
