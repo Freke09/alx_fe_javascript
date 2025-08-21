@@ -182,7 +182,7 @@ function saveServerQuotes(newQuotes) {
     return fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "POST",
         headers: {
-            "content-type": "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(newQuotes)
     })
