@@ -164,7 +164,7 @@ let serverQuotes = [
 ];
 
 // Fake server API
-function fetchServerQuotes() {
+function fethQuotesFromServer() {
     return new Promise((resolve) => {
         setTimeout(() => resolve([...serverQuotes]), 1000);
     });
@@ -182,7 +182,7 @@ function saveServerQuotes(newQuotes) {
 
 async function syncFromServer() {
     try {
-        const serverData = await fetchServerQuotes();
+        const serverData = await fethQuotesFromServer();
 
 
         // compare with local quotes
